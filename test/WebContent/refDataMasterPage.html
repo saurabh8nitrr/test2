@@ -1,0 +1,807 @@
+<script type="text/ng-template" id="uploadfile.html">
+ 
+
+<div class="close-icon-position-ref position-relative">
+<a type="button"  class="" data-dismiss="popover" aria-hidden="true" ng-click="closepop()"> 
+<span class="Customicon-close"></span>
+</a>
+</div>
+
+<div class="form-group tap width-100"> 
+<form  method="Post" enctype="multipart/form-data"> 
+
+<div  class="form-group popover-upload-button-position width-100"> 
+                     <input type="button" id="choose" class="screen-btn" value="Choose File" />
+                     <input accept=".csv"  file-model="file" type="file" id="popfileName" onchange="myFunction()" class="choose-file-position-ref border-radius-5 position-relative pointerCustomize"/> 
+
+              </div> 
+
+              <div class="form-group file-upload-position text-overflow" id="myDIV"> 
+                     <span tooltip-placement="right" uib-tooltip = "{{filename}}" class="font-regular-13 ">{{filename}}</span>
+
+              <div class="height-30px">
+                   <div class="height-30px bold12 operation-fail-messages position-relative" id="uploadResult" ng-show="uploadError">
+                  <error-handler handle-msg="errorDir.handleMsg" type-error="errorDir.typeError"></error-handler>
+               </div>
+              </div>
+
+                     <!-- <div class="height-30px bold12 operation-fail-messages" id="uploadResult">
+<span ng-show="uploadError" class="position-relative top-5">{{alerts.message}}</span>
+</div> -->
+                    <div class= "float-right">
+                           <button type="submit" id="change" class="margin-right-6px change-file-button" ng-click="change()">Change file</button> 
+                           <button type="submit" class="screen-btn margin-0" ng-click="upload(file)">Upload</button>
+                    </div>
+
+              </div>
+
+</form>
+</div>
+</script>
+
+<content-title contentheading="{{metadata.title}}"></content-title>
+<div id="content" class="contentScrollbar" popover-close
+	exclude-class="exclude">
+	<!-- ***************************search and new calls************************************************ -->
+	<form>
+		<div id="srch" class="displayInline width-100">
+			<div
+				class="height-33 width-24p border-color-b9c2ce padding-right-10 regular12">
+				<select
+					class="border-radius-5 width-100 height-100 form-control padding-left-15px-update"
+					ng-model="selectedEntity"
+					ng-options="entity.title for entity in entityMapping"
+					id="padding-left-5">
+
+				</select>
+			</div>
+
+			<div class="displayInline dropdownAndSearch padding-0">
+				<select
+					class="dropdownSelect twoRoundedCorneredDropdownSelect width-240-height-33"
+					ng-model="dropdownSelected"
+					ng-change="searchColumnSelected(dropdownSelected)"
+					ng-options="columnName.displayName for columnName in gridOptions.columnDefs"
+					id="padding-left-5">
+				</select> <input id="searchbox" type="text" align="left"
+					class="twoRoundedCorneredSearchInput searchInput form-control"
+					ng-model="searchValue" ng-change='filterGrid()' maxlength='100' />
+				<span class="Customicon-Search iconSearch"></span>
+			</div>
+
+			<div class="margin-left-33 width-12p height-33">
+				<button class="screen-btn width-100 margin-0"
+					ng-click="newRecord(); showDialog('refdataNewModal')">
+
+					<div class="">
+
+						<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+							width="50px" height="50px"
+							style="float: left; width: 15px; height: 25px; margin-top: -3px;"
+							color="white" viewBox="0 0 50 50"
+							enable-background="new 0 0 50 50" xml:space="preserve"
+							class="margin-right-9p">
+                                  <g>
+                                  <g>
+                                  <path fill="white"
+								d="M25,0.3C11.4,0.3,0.3,11.4,0.3,25c0,13.6,11.1,24.7,24.7,24.7c13.6,0,24.7-11.1,24.7-24.7C49.7,11.4,38.6,0.3,25,0.3z
+                                     M25,47.4C12.6,47.4,2.6,37.4,2.6,25C2.6,12.6,12.6,2.6,25,2.6c12.4,0,22.4,10.1,22.4,22.4C47.4,37.4,37.4,47.4,25,47.4z" />
+                                  <path fill="white"
+								d="M25,50C11.2,50,0,38.8,0,25C0,11.2,11.2,0,25,0c13.8,0,25,11.2,25,25C50,38.8,38.8,50,25,50z M25,0.6
+                               C11.5,0.6,0.6,11.5,0.6,25c0,13.5,11,24.4,24.4,24.4c13.5,0,24.4-11,24.4-24.4C49.4,11.5,38.5,0.6,25,0.6z M25,47.7
+                               C12.5,47.7,2.3,37.5,2.3,25C2.3,12.5,12.5,2.3,25,2.3c12.5,0,22.7,10.2,22.7,22.7C47.7,37.5,37.5,47.7,25,47.7z M25,2.9
+                               C12.8,2.9,2.9,12.8,2.9,25c0,12.2,9.9,22.1,22.1,22.1S47.1,37.2,47.1,25C47.1,12.8,37.2,2.9,25,2.9z" />
+                              
+                                 </g>
+                                  <g>
+                                   <path fill="white"
+								d="M36.9,23H27v-9.9c0-1.1-0.9-2-2-2s-2,0.9-2,2V23h-9.9c-1.1,0-2,0.9-2,2c0,1.1,0.9,2,2,2H23v9.9
+                                      c0,1.1,0.9,2,2,2s2-0.9,2-2V27h9.9c1.1,0,2-0.9,2-2C38.9,23.9,38,23,36.9,23z" />
+                                 </g>
+                                 </g>
+                            </svg>
+
+						<div class="">
+							<span class="">New</span>
+						</div>
+					</div>
+
+				</button>
+			</div>
+		</div>
+	</form>
+
+	<!-- ****************************show grid************************************ -->
+	<div class="col-lg-12 col-xs-12 padding-zero" id="right-mobile">
+		<div class="panel panel-default margin-0">
+			<div ui-grid="gridOptions" ui-grid-selection ui-grid-pagination
+				ui-grid-exporter ui-grid-move-columns class="grid grid-height-400"></div>
+			<custom-pagination for-grid="gridOptions" ng-model="gridOptions"></custom-pagination>
+		</div>
+	</div>
+
+	<!-- ***************************show audit button************************************************ -->
+	<div class="displayInline width-100">
+		<div class="width-79">
+			<button class="screen-btn minimum-width margin-right-10"
+				ng-click="showAudit();">Show Audit</button>
+
+			<!-- ***************************Upload button************************************************ -->
+			<input uib-popover-template="templateUrl"
+				popover-trigger="outsideClick" popover-title="Upload File"
+				type="button" popover-is-open="isOpen"
+				class="screen-btn minimum-width  margin-right-10"
+				value="Upload file" popover-append-to-body="true"
+				popover-animation="false" popover-elem />
+
+			<!-- ***************************Download button************************************************ -->
+			<button ng-click="export()" class="screen-btn minimum-width ">Download
+			</button>
+			<div class="custom-csv-link-location"></div>
+		</div>
+
+
+		<!-- ***************************Get Import Template button************************************************ -->
+
+		<button ng-click="fetchSheet()" class="screen-btn minimum-width ">Get
+			Import Template</button>
+	</div>
+	<!--********************************* details tab************************************************************  -->
+	<div class="modal fade" id="popUpDetail" role="dialog"
+		ng-show="gridApi.core.getVisibleRows().length">
+		<div class="modal-dialog width-44per">
+			<div class="popup-content width-100" style="width: 100.834%;">
+				<div class="popup-header">
+					<!-- <button type="button" class="close-custom opacity margin-right-10"
+                                                                                                data-dismiss="modal" ng-click=" closeIcon=true; cancel();">
+                                                                                                <span class="Closeicon-close"></span>
+                                                                                </button>
+                                                                                <h4 class="modal-title-custom">{{metadata.title}}</h4> -->
+					<a class="opacity" ng-click="closeIcon=true; cancel();"
+						data-dismiss="modal"> <span class="Customicon-close opacity"></span>
+					</a> {{metadata.title}}
+				</div>
+				<div class="popup-body contentScrollbar popupScroll">
+					<ul
+						class="nav nav-tabs allocatenav font-bold-13 allocatenav-tabs margin-0 padding-20p margin-left-15 margin-right-15"
+						style="margin: 0 15px">
+						<li role="presentation"
+							ng-class="{arrow_box: detailView == '_details'} "
+							id="tab1Content"><a href
+							ng-click="detailView = '_details'; setOperation()"
+							data-target="#tab1" data-toggle="tab">Details</a></li>
+						<li role="presentation"
+							ng-class="{arrow_box: detailView == relation.alias}"
+							ng-repeat="relation in metadata.relationships" id="tab2Content">
+							<a href ng-click="viewRelation('{{relation.alias}}');"
+							data-target="#tab2" data-toggle="tab"> {{relation.title}}</a>
+						</li>
+					</ul>
+
+					<div class="tab-content" class="contentScrollbar">
+						<div class="tab-pane active" id="tab1">
+							<div class="row">
+								<div ng-show="detailView=='_details'">
+									<div
+										class="panel-body panel-reduce-bottom-margin font-grey padding-right-199 margin-top-m19"
+										ng-show="!newRecordFlag" style="padding-bottom: 0px;">
+										<fieldset ng-disabled="!edit">
+											<div class="panel-body panel-reduce-bottom-margin"
+												style="padding-top: 3px; padding-bottom: 0px;">
+												<ng-form name="crudFormUpdate" novalidate>
+												<div style="width: 116.348%">
+													<div class="col-sm-6 padding-0 margin-bottom-10"
+														ng-repeat="metaobj in metadata.fields"
+														ng-show="metaobj.widgetType !== 'hidden'"
+														ng-class="{'has-error': crudFormUpdate.uField{{$index}}.$invalid}">
+														<label for="{{metaobj.title}}"
+															class="form-control-label popup-label margin-bottom-5">{{metaobj.title}}
+														</label>
+														<div class="height-33">
+															<!-- below input tag is for validating fields-->
+															<input style="width: 72.08%"
+																ng-if="metaobj.widgetType != 'label' && !metaobj.parentEntity && metaobj.needValidation
+                                                                                                                                                                                                                                                                && metaobj.widgetType != 'hidden' && metaobj.widgetType !='checkbox'
+                                                                                                                                                                                                                                                                && metaobj.widgetType !='textarea' "
+																class="form-control margin-text-margin font-size-12 input-box-custom width-240px"
+																name="uField{{$index}}"
+																type="{{(metaobj.widgetType)?metaobj.widgetType:'text'}}"
+																ng-model="metaobj.value"
+																ng-class="{'restrict-height-15': metaobj.widgetType == 'checkbox'}"
+																ng-required="{{metaobj.needValidation}}"
+																ng-pattern=metaobj.regex
+																ng-maxlength="{{(metaobj.maxLength==0) ? Number.MAX_SAFE_INTEGER : metaobj.maxLength}}"
+																maxlength="{{metaobj.maxLength + 1}}"
+																ng-disabled="metaobj.id" />
+															<!-- ng-disabled="metaobj.id && edit" -->
+
+															<!-- for field not requiring any validations -->
+															<input style="width: 72.08%"
+																ng-if="metaobj.widgetType != 'label' && metaobj.widgetType != 'textarea' && !metaobj.parentEntity &&
+                                                                !metaobj.needValidation && metaobj.widgetType != 'hidden' && metaobj.widgetType !='checkbox'"
+																type="{{(metaobj.widgetType)?metaobj.widgetType:'text'}}"
+																ng-model="metaobj.value"
+																ng-class="{'form-control': metaobj.widgetType !== 'checkbox'}"
+																class="margin-text-margin input-box-custom font-size-12 width-240px"
+																ng-disabled="metaobj.id"
+																maxlength="{{metaobj.maxLength}}" />
+															<!-- ng-disabled="metaobj.id && !edit"  -->
+
+															<!-- for field not requiring any validations and are checkbox only-->
+															<input
+																ng-if="metaobj.widgetType =='checkbox' && !metaobj.needValidation"
+																type="checkbox" ng-model="metaobj.value"
+																class="checkbox-dimenssions" ng-true-value="'A'"
+																ng-false-value="'D'" />
+
+															<!-- for field not requiring any validations and are textarea only-->
+															<textarea style="width: 72.08%"
+																ng-if="metaobj.widgetType == 'textarea' && !metaobj.parentEntity && !metaobj.needValidation"
+																class="form-control text-area-custom width-240px"
+																ng-model="metaobj.value" ng-disabled="metaobj.id"
+																maxlength="{{metaobj.maxLength}}">
+                                                            </textarea>
+															<!-- for field requiring validations and are textarea only-->
+															<textarea style="width: 72.08%"
+																ng-if="metaobj.widgetType=='textarea' && !metaobj.parentEntity && metaobj.needValidation"
+																class="form-control text-area-custom width-240px"
+																name="uField{{$index}}"
+																ng-required="{{metaobj.needValidation}}"
+																ng-model="metaobj.value" ng-disabled="metaobj.id"
+																ng-maxlength="metaobj.maxLength"
+																maxlength="{{metaobj.maxLength + 1}}">
+                                                            </textarea>
+															<span ng-if="metaobj.widgetType == 'label'"
+																class="col-lg-12" ng-bind="metaobj.value" />
+															<!-- validation parameters -->
+															<p
+																ng-show="crudFormUpdate.uField{{$index}}.$error.required && !crudFormUpdate.uField{{$index}}.$pristine"
+																class="validationMessages padding-top-5px"
+																id="validationMessage">{{metaobj.title}} cannot be
+																empty.</p>
+															<p
+																ng-show="crudFormUpdate.uField{{$index}}.$error.minlength"
+																class="validationMessages padding-top-5px"
+																id="validationMessage">{{metaobj.title}} is too
+																short.</p>
+															<p
+																ng-show="crudFormUpdate.uField{{$index}}.$error.maxlength"
+																class="validationMessages padding-top-5px"
+																id="validationMessage">{{metaobj.title}} is too
+																long.</p>
+															<p
+																ng-show="crudFormUpdate.uField{{$index}}.$invalid && !crudFormUpdate.uField{{$index}}.$pristine
+                                                                                                                                                                                                                                                 && !crudFormUpdate.uField{{$index}}.$error.minlength && !crudFormUpdate.uField{{$index}}.$error.maxlength
+                                                                                                                                                                                                                                                && !crudFormUpdate.uField{{$index}}.$error.required"
+																class="validationMessages padding-top-5px"
+																id="validationMessage">{{metaobj.title}} is not
+																valid.</p>
+
+															<select ng-if="metaobj.parentEntity"
+																ng-model="metaobj.value[metaobj.parentKey]"
+																ng-required="true"
+																class="padding-left-15px-update form-control width-240px"
+																name="uField{{$index}}" style="width: 72.08%">
+																<option ng-repeat="item in parentData[metaobj.property]"
+																	value="{{item[metaobj.parentKey]}}">
+																	{{item[metaobj.parentDesc]}}</option>
+															</select>
+														</div>
+													</div>
+												</div>
+												</ng-form>
+
+												<form name="rbsThresholdUpdateForm" novalidate>
+													<div ng-if="rbs"
+														class="col-sm-12 padding-top-10px padding-0">
+														<label
+															class="form-control-label popup-label margin-bottom-5">
+															Set Threshold </label>
+														<!-- <div class="width-100"> -->
+														<div class="">
+															<div class="displayInline width-100 "
+																style="padding-bottom: 10px"
+																ng-class="{'has-error': rbsThresholdUpdateForm.redThreshold.$invalid
+                                                                                                                                                                                                                                                                                && rbsThresholdUpdateForm.redThreshold.$invalid &&
+                                                                                                                                                                                                                                                                                rbsThresholdUpdateForm.redThreshold.$dirty || rbsThresholdUpdateFormSubmitted &&
+                                                                                                                                                                                                                                                                                rbsThresholdUpdateForm.redThreshold.$untouched || rbsThresholdUpdateForm.redThreshold.$touched
+                                                                                                                                                                                                                                                                                && rbsThresholdUpdateForm.redThreshold.$invalid || rbsThresholdUpdateFormSubmitted &&
+                                                                                                                                                                                                                                                                                rbsThresholdUpdateForm.redThreshold.$invalid || rbsThresholdUpdateForm.redThreshold.$untouched
+                                                                                                                                                                                                                                                                                && rbsThresholdUpdateForm.redThreshold.$invalid}">
+																<img src="./scripts/audit/images/circle_red.png"
+																	width='12px' height='12px'
+																	style="margin-top: 9px; margin-right: 3%;" /> <span
+																	class="margin-top-5"> > = </span> <input type="text"
+																	ng-model="rbsValue.redThreshold" name="redThreshold"
+																	class="form-control width-40px margin-left-2 height-30px"
+																	maxlength="2"
+																	onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+																	ng-disabled="newMessage" required>
+																<div class="margin-left-2">
+																	<label class="bottom-4 position-relative"> days
+																	</label>
+																</div>
+																<p
+																	ng-show="rbsThresholdUpdateForm.redThreshold.$error.required && !rbsThresholdUpdateForm.redThreshold.$pristine"
+																	class="validationMessages margin-left-2"
+																	id="validationMessage">Red Threshold Value cannot
+																	be empty.</p>
+
+															</div>
+															<div class="width-100 displayInline "
+																style="padding-bottom: 10px">
+																<img src="./scripts/audit/images/circle_amber.png"
+																	width='12px' height='12px'
+																	style="margin-top: 9px; margin-right: 3%;" /> <span
+																	class="margin-top-5"> < </span> <input
+																	type="{{(metaobj.widgetType)?metaobj.widgetType: 'text'}}"
+																	ng-model="rbsValue.redThreshold"
+																	class="form-control width-40px margin-left-4 height-30px"
+																	ng-disabled="lockRbsValue">
+																<div
+																	ng-class="{'has-error': rbsThresholdUpdateForm.amberThreshold.$invalid
+ 
+                                                                                                                                                                                                                                                                                                && rbsThresholdUpdateForm.amberThreshold.$invalid &&
+                                                                                                                                                                                                                                                                                                rbsThresholdUpdateForm.amberThreshold.$dirty || rbsThresholdUpdateFormSubmitted &&
+                                                                                                                                                                                                                                                                                                rbsThresholdUpdateForm.amberThreshold.$untouched || rbsThresholdUpdateForm.amberThreshold.$touched
+                                                                                                                                                                                                                                                                                                && rbsThresholdUpdateForm.amberThreshold.$invalid || rbsThresholdUpdateFormSubmitted &&
+                                                                                                                                                                                                                                                                                                rbsThresholdUpdateForm.amberThreshold.$invalid || rbsThresholdUpdateForm.amberThreshold.$untouched
+                                                                                                                                                                                                                                                                                                && rbsThresholdUpdateForm.amberThreshold.$invalid }"
+																	class="displayInline width-240px">
+																	<span class="margin-left-4 margin-top-5"> > </span> <input
+																		type="{{(metaobj.widgetType)?metaobj.widgetType: 'text'}}"
+																		ng-model="rbsValue.amberThreshold"
+																		name="amberThreshold"
+																		class="form-control margin-left-4 height-30px width-9"
+																		maxlength="2"
+																		onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+																		ng-disabled="newMessage" required>
+																	<div class="margin-left-2">
+																		<label bottom-4 position-relative> days </label>
+																	</div>
+																	<p
+																		ng-show="rbsThresholdUpdateForm.amberThreshold.$error.required && !rbsThresholdUpdateForm.amberThreshold.$pristine"
+																		class="validationMessages margin-left-2"
+																		id="validationMessage">Amber Threshold Value
+																		cannot be empty.</p>
+																</div>
+															</div>
+														</div>
+														<div class="width-100 displayInline">
+															<img src="./scripts/audit/images/circle_green.png"
+																width='12px' height='12px'
+																style="margin-top: 9px; margin-right: 3%;" /> <span
+																class="margin-top-5"> < = </span> <input
+																type="{{(metaobj.widgetType)?metaobj.widgetType: 'text'}}"
+																ng-model="rbsValue.amberThreshold"
+																class="form-control width-40px margin-left-2 height-30px"
+																ng-disabled="lockRbsValue">
+															<div class="margin-left-2">
+																<label bottom-4 position-relative> days </label>
+															</div>
+														</div>
+													</div>
+												</form>
+											</div>
+										</fieldset>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="tab-pane" id="tab2">
+
+							<div class="margin-top-10 contentScrollbar"
+								style="overflow-x: auto">
+								<div id="srch" ng-if="enableSearch">
+									<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+										<div class="col-lg-6 col-md-4 col-sm-4 col-xs-4 margin-top10 ">
+											<form>
+												<input id="singlesearchbox" type="text" align="left"
+													class="form-control search-dimension margin-subarea"
+													placeholder="Search" ng-model="searchValue"
+													ng-change='searchParameter(searchValue)' maxlength='100' />
+												<div style="margin-top: -31px; margin-left: 180px;">
+													<span class="Pageicon-Search "></span>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
+								<div ng-repeat="relation in relationshipData"
+									class="col-sm-12 ng-scope displayInline text-justify"
+									ng-if="!showSearch">
+									<div>
+										<input type="checkbox" class="checkbox-dimenssions"
+											ng-model="relation[checkboxConfig.configFieldKey]"
+											ng-click="checboxChange(relation)"
+											ng-checked="relation[checkboxConfig.configFieldKey] === checkboxConfig.activeFlagValue"
+											ng-disabled="checkboxDisabled" />
+									</div>
+									<div>{{relation[relationMapping.secondParentKey][relationMapping.displayProperty]}}
+
+									</div>
+								</div>
+								<div ng-if="showSearch" ng-repeat="relation in searchResult"
+									class="col-lg-12 ng-scope">
+									<input type="checkbox"
+										ng-model="relation[checkboxConfig.configFieldKey]"
+										ng-click="checboxChange(relation)"
+										ng-checked="relation[checkboxConfig.configFieldKey] === checkboxConfig.activeFlagValue"
+										ng-disabled="checkboxDisabled"> &nbsp;
+
+									{{relation[relationMapping.secondParentKey][relationMapping.displayProperty]}}
+									</input>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div ng-show="detailView == '_details'">
+					<div class="popup-footer">
+						<div class="float-left bold12 operation-success-messages"
+							ng-show="showMessage">
+
+							<error-handler handle-msg="errorDir.handleMsg"
+								type-error="errorDir.typeError"></error-handler>
+
+							<!-- <span
+class="bold12 operation-success-messages"
+ng-show="showMessage">{{alerts.message}} </span> <span
+class="bold12 operation-fail-messages"
+ng-show="showErrorMessage">{{alerts.message}} </span> <span
+class="bold12 operation-fail-messages"
+ng-show="errorMessage">{{alerts.message}} </span> -->
+						</div>
+						<button ng-click="updateRecord()"
+							class="popup-btn-custom marginRight1percent" ng-show="!edit">Update</button>
+						<button class="popup-btn-custom" ng-click="cancel()"
+							ng-show="!edit">Reset</button>
+						<button ng-hide="rbs || !edit"
+							class="popup-btn-custom marginRight1percent"
+							ng-click="saveData(); edit=false;"
+							ng-disabled="crudFormUpdate.$invalid">Save</button>
+						<button ng-if="rbs && edit"
+							class="popup-btn-custom marginRight1percent"
+							ng-click="saveData(); edit=false;"
+							ng-disabled="crudFormUpdate.$invalid || rbsThresholdUpdateForm.$invalid">Save</button>
+						<button class="popup-btn-custom" ng-click="edit=false; cancel()"
+							ng-show="edit">Reset</button>
+					</div>
+				</div>
+				<div ng-show="detailView != '_details'">
+					<div class="popup-footer">
+						<div class="bold12 operation-success-messages float-left"
+							ng-show="showMessage">
+							<error-handler handle-msg="errorDir.handleMsg"
+								type-error="errorDir.typeError"></error-handler>
+						</div>
+						<!-- <span
+class="bold12 operation-success-messages float-left"
+ng-show="showMessage">{{alerts.message}} </span> 
+<span
+class="bold12 operation-fail-messages float-left"
+ng-show="showErrorMessage">{{alerts.message}} </span> -->
+						<button ng-click="updateRecord()"
+							class="popup-btn-custom marginRight1percent"
+							ng-show="checkboxDisabled">Update</button>
+						<button class="popup-btn-custom" ng-click="cancel()"
+							ng-show="checkboxDisabled">Reset</button>
+						<button ng-hide="rbs || checkboxDisabled"
+							class="popup-btn-custom marginRight1percent"
+							ng-click="saveData();" ng-disabled="crudFormUpdate.$invalid">Save</button>
+						<button ng-if="rbs && !checkboxDisabled"
+							class="popup-btn-custom marginRight1percent"
+							ng-click="saveData();"
+							ng-disabled="crudFormUpdate.$invalid || rbsThresholdUpdateForm.$invalid">Save</button>
+						<button class="popup-btn-custom" ng-click="cancel()"
+							ng-show="!checkboxDisabled">Reset</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--********************************new vendor popup*********************************************-->
+<div id="refdataNewModal" class="modal fade"
+	ng-if="detailView =='_details'"">
+	<div class="modal-dialog width-44per">
+		<div class="popup-content" style="width: 98.276%;">
+			<div class="popup-header">
+				<a class="bold-17"
+					ng-click="cancel();hideDialog('refdataNewModal'); detailView='_details'"
+					data-dismiss="modal"><span class="Customicon-close opacity"></span>
+				</a> {{metadata.title}}
+			</div>
+
+			<div class="popup-body contentScrollbar popupScroll" id="scrollbar">
+				<ng-form name="crudForm" novalidate>
+				<div style="width: 108%">
+					<div class="" ng-if="newRecordFlag">
+						<div class="col-sm-6 margin-bottom-10"
+							ng-repeat="metaobj in metadata.fields"
+							ng-show="metaobj.widgetType !=='hidden'"
+							ng-class="{'has-error': crudForm.uField{{$index}}.$invalid}">
+
+							<label for="{{metaobj.title}}"
+								class="form-control-label popup-label margin-width-left-right">
+								{{metaobj.title}} </label>
+
+							<div class="height-33">
+								<!-- <div class="col-md-12"> -->
+								<input style="width: 83.626%"
+									ng-if="metaobj.widgetType !='label' && !metaobj.parentEntity && metaobj.needValidation
+                                                                                         && metaobj.widgetType != 'hidden' && metaobj.widgetType !='checkbox' && metaobj.widgetType !='textarea'"
+									class="form-control margin-text-margin font-size-12 input-box-custom width-240px"
+									name="uField{{$index}}"
+									type="{{(metaobj.widgetType)?metaobj.widgetType: 'text'}}"
+									ng-model="metaobj.value"
+									ng-required="{{metaobj.needValidation}}"
+									ng-pattern=metaobj.regex ng-maxlength="metaobj.maxLength"
+									maxlength="{{metaobj.maxLength + 1}}" ng-disabled="newMessage"
+									check-if-exists />
+								<!-- ng-disabled="metaobj.id && currentOperation=='update'" -->
+
+
+								<!-- for field not requiring any validations -->
+								<input style="width: 83.626%"
+									ng-if="metaobj.widgetType !='label' && metaobj.widgetType !='textarea'
+                                                                                           && !metaobj.parentEntity && !metaobj.needValidation && metaobj.widgetType != 'hidden'
+                                                                                           && metaobj.widgetType !='checkbox'"
+									type="{{(metaobj.widgetType)?metaobj.widgetType: 'text'}}"
+									ng-model="metaobj.value"
+									ng-class="{'form-control': metaobj.widgetType !='checkbox'} "
+									class="form-control margin-text-margin font-size-12 input-box-custom width-240px"
+									maxlength="{{metaobj.maxLength}}" ng-disabled="newMessage" />
+								<!-- ng-disabled="metaobj.id && currentOperation=='update'"  -->
+
+								<!-- for field not requiring any validations and are checkbox only-->
+								<input
+									ng-if="metaobj.widgetType =='checkbox' && !metaobj.needValidation"
+									type="checkbox" ng-model="metaobj.value"
+									class="checkbox-dimenssions" style="margin-bottom: 32px;"
+									ng-disabled="newMessage" ng-true-value="'A'"
+									ng-false-value="'D'" />
+
+								<!-- </div> -->
+
+								<textarea style="width: 83.626%"
+									ng-if="metaobj.widgetType=='textarea' && !metaobj.parentEntity && !metaobj.needValidation"
+									class="form-control text-area-custom width-240px"
+									ng-model="metaobj.value" ng-disabled="newMessage"
+									maxlength="{{metaobj.maxLength}}">
+                                                              </textarea>
+
+								<!-- for field requiring validations and are textarea only-->
+								<textarea style="width: 83.626%"
+									ng-if="metaobj.widgetType=='textarea' && !metaobj.parentEntity && metaobj.needValidation"
+									class="form-control text-area-custom margin-top-13"
+									name="uField{{$index}}"
+									ng-required="{{metaobj.needValidation}}"
+									ng-model="metaobj.value" ng-disabled="newMessage"
+									ng-maxlength="metaobj.maxLength"
+									maxlength="{{metaobj.maxLength + 1}}">
+                                                                                                                                                </textarea>
+
+								<select ng-if="metaobj.parentEntity" ng-model="metaobj.value"
+									style="width: 83.626%" ng-required="{{metaobj.needValidation}}"
+									class="form-control padding-left-15px-update width-240px"
+									name="uField{{$index}}" ng-disabled="newMessage">
+									<option ng-repeat="item in parentData[metaobj.property]"
+										value={{item}}
+										ng-selected="item[metaobj.parentDesc]==metaobj.value[metaobj.parentDesc]">
+										{{item[metaobj.parentDesc]}}</option>
+								</select> <span ng-if="metaobj.widgetType=='label'" class="col-lg-12"
+									ng-bind="metaobj.value"> </span>
+
+								<!-- validation parameters -->
+								<p
+									ng-show="crudForm.uField{{$index}}.$error.required && !crudForm.uField{{$index}}.$pristine"
+									class="validationMessages padding-top-5px"
+									id="validationMessage">{{metaobj.title}} cannot be empty.</p>
+								<p ng-show="crudForm.uField{{$index}}.$error.minlength"
+									class="validationMessages padding-top-5px"
+									id="validationMessage">{{metaobj.title}} is too short.</p>
+								<p ng-show="crudForm.uField{{$index}}.$error.maxlength"
+									class="validationMessages padding-top-5px"
+									id="validationMessage">{{metaobj.title}} is too long.</p>
+								<p ng-show="crudForm.uField{{$index}}.$error.invalidUser"
+									class="validationMessages padding-top-5px"
+									id="validationMessage">Invalid
+									{{metaobj.title}}."{{metaobj.value}}" already exists in
+									database.</p>
+								<!-- <p ng-show="crudForm.uField{{$index}}.$error.invalidUser"
+                                                                                         class="margin-left-87" id="validationMessage">"{{metaobj.value}}" already exists in database.
+                                                              </p> -->
+								<p
+									ng-show="crudForm.uField{{$index}}.$invalid && !crudForm.uField{{$index}}.$error.invalidUser && !crudForm.uField{{$index}}.$pristine
+                                                                           && !crudForm.uField{{$index}}.$error.minlength && !crudForm.uField{{$index}}.$error.maxlength &&
+                                                                            !crudForm.uField{{$index}}.$error.required"
+									class="validationMessages" id="validationMessage">{{metaobj.title}}
+									is not valid.</p>
+
+							</div>
+						</div>
+					</div>
+				</div>
+				</ng-form>
+
+				<form name="rbsThresholdForm" novalidate>
+					<div ng-if="rbs" class="col-sm-12 padding-top-10px">
+						<label class="form-control-label popup-label margin-bottom-10">
+							Set Threshold </label>
+
+						<div class="">
+							<div class="displayInline width-100 padding-bottom-15px"
+								ng-class="{'has-error': rbsThresholdForm.redThreshold.$invalid
+                                                                                  && rbsThresholdForm.redThreshold.$invalid &&
+                                                                                  rbsThresholdForm.redThreshold.$dirty || rbsThresholdFormSubmitted &&
+                                                                                  rbsThresholdForm.redThreshold.$untouched || rbsThresholdForm.redThreshold.$touched
+                                                                                  && rbsThresholdForm.redThreshold.$invalid || rbsThresholdFormSubmitted &&
+                                                                                  rbsThresholdForm.redThreshold.$invalid || rbsThresholdForm.redThreshold.$untouched
+                                                                                  && rbsThresholdForm.redThreshold.$invalid}">
+								<img src="./scripts/audit/images/circle_red.png" width='12px'
+									height='12px' style="margin-top: 9px; margin-right: 3%;" /> <span
+									class="margin-top-5"> > = </span> <input type="text"
+									ng-model="rbsValue.redThreshold" name="redThreshold"
+									class="form-control width-40px margin-left-2 height-30px"
+									maxlength="2"
+									onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+									ng-disabled="newMessage" required>
+								<div class="margin-left-2">
+									<label> days </label>
+								</div>
+
+								<p
+									ng-show="rbsThresholdForm.redThreshold.$error.required && !rbsThresholdForm.redThreshold.$pristine"
+									class="validationMessages margin-left-2" id="validationMessage">Red
+									Threshold Value cannot be empty.</p>
+
+							</div>
+
+							<div class="width-100 displayInline padding-bottom-15px">
+
+								<img src="./scripts/audit/images/circle_amber.png" width='12px'
+									height='12px' style="margin-top: 9px; margin-right: 3%;" /> <span
+									class="margin-top-5"> < </span> <input
+									type="{{(metaobj.widgetType)?metaobj.widgetType: 'text'}}"
+									ng-model="rbsValue.redThreshold"
+									class="form-control width-40px margin-left-4 height-30px"
+									ng-disabled="lockRbsValue">
+
+
+								<div
+									ng-class="{'has-error': rbsThresholdForm.amberThreshold.$invalid
+                                                                                                                           && rbsThresholdForm.amberThreshold.$invalid &&
+                                                                                                                           rbsThresholdForm.amberThreshold.$dirty || rbsThresholdFormSubmitted &&
+                                                                                                                           rbsThresholdForm.amberThreshold.$untouched || rbsThresholdForm.amberThreshold.$touched
+                                                                                                                           && rbsThresholdForm.amberThreshold.$invalid || rbsThresholdFormSubmitted &&
+                                                                                                                           rbsThresholdForm.amberThreshold.$invalid || rbsThresholdForm.amberThreshold.$untouched
+                                                                                                                           && rbsThresholdForm.amberThreshold.$invalid } "
+									class="displayInline width-240px">
+
+									<span class="margin-left-4 margin-top-5"> > </span> <input
+										type="{{(metaobj.widgetType)?metaobj.widgetType: 'text'}}"
+										ng-model="rbsValue.amberThreshold" name="amberThreshold"
+										class="form-control margin-left-4 height-30px width-9"
+										maxlength="2"
+										onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+										ng-disabled="newMessage" required>
+									<div class="margin-left-2">
+										<label> days </label>
+									</div>
+									<p
+										ng-show="rbsThresholdForm.amberThreshold.$error.required && !rbsThresholdForm.amberThreshold.$pristine"
+										class="validationMessages margin-left-2"
+										id="validationMessage">Amber Threshold Value cannot be
+										empty.</p>
+								</div>
+
+							</div>
+
+							<div class="width-100 displayInline">
+								<img src="./scripts/audit/images/circle_green.png" width='12px'
+									height='12px' style="margin-top: 9px; margin-right: 3%;">
+								<span class="margin-top-5"> < = </span> <input
+									type="{{(metaobj.widgetType)?metaobj.widgetType: 'text'}}"
+									ng-model="rbsValue.amberThreshold"
+									class="form-control width-40px margin-left-2 height-30px"
+									ng-disabled="lockRbsValue">
+								<div class="margin-left-2">
+									<label> days </label>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</form>
+			</div>
+
+			<div class="popup-footer" class="col-lg-12">
+				<div class="bold12 operation-success-messages float-left"
+					ng-if="showMessage">
+					<error-handler handle-msg="errorDir.handleMsg"
+						type-error="errorDir.typeError"></error-handler>
+				</div>
+				<!-- <span
+class="bold12 operation-success-messages float-left"
+ng-show="showMessage">{{alerts.message}} </span> 
+<span
+class="bold12 operation-fail-messages float-left"
+ng-show="showErrorMessage">{{alerts.message}} </span> -->
+
+				<button ng-hide="rbs" class="popup-btn-custom marginRight1percent"
+					ng-disabled="crudForm.$invalid || newMessage"
+					ng-click="saveData(); detailView='_details'">Save</button>
+
+				<button ng-if="rbs" class="popup-btn-custom marginRight1percent"
+					ng-disabled="crudForm.$invalid || rbsThresholdForm.$invalid ||newMessage"
+					ng-click="saveData(); detailView='_details'">Save</button>
+
+				<button class="popup-btn-custom"
+					ng-click="detailView='_details'; clear()" ng-disabled="newMessage">Reset
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!------------------------------------------- show audit functionality start ----------------------------------------------------->
+<div id="showAuditModal" class="modal fade">
+	<div class="modal-dialog width-44per">
+		<div class="popup-content">
+			<div class="popup-header">
+				<a type="button" class="close-custom opacity" data-dismiss="modal"
+					ng-click="cancel();"> <span class="Customicon-close"></span>
+				</a>{{metadata.title}}
+			</div>
+
+			<div class="" ng-if="showAuditData">
+				<div class="panel-body panel-reduce-bottom-margin font-grey"
+					style="padding-bottom: 0px">
+					<div class="width-100" style="height: 314px">
+						<div ui-grid="gridOptionsAuditHistory" ui-grid-selection
+							ui-grid-pagination class="grid grid-height-300">
+							<custom-pagination for-grid="gridOptionsAuditHistory"
+								ng-model="gridOptionsAuditHistory"></custom-pagination>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div
+				class="popup-footer modal-footer-background-border border-radius-5">
+				<button class="screen-btn margin-0" data-dismiss="modal"
+					ng-click="hideDialog('showAuditModal');">Hide Audit</button>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<!-- ------------------------------------ Info Popup------------------------------------------ -->
+
+<div id="confirmClose" class="modal fade">
+	<div class="modal-dialog width-44per">
+		<div class="popup-info-custom">
+			<div class="popup-header">
+				<a class="Customicon-close opacity" data-dismiss="modal"> <span
+					class="Closeicon-close"></span>
+				</a> <span class="Customicon-info"></span>
+			</div>
+			<form name="emptyChangePasswordForm" novalidate autocomplete="off">
+
+				<div class="info-popup-message">{{message}}</div>
+
+				<div class="info-popup-footer">
+					<button data-dismiss="modal" class="popup-btn-custom marginTop15px">Ok
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
